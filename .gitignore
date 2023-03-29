@@ -1,0 +1,8 @@
+*.zip
+*.h5
+Keterangan Data/**
+model_save/**
+matlab/**
+result/**
+data/**
+matrix/**
