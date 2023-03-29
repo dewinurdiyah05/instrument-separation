@@ -1,0 +1,1 @@
+pip install librosa wavio h5py scipy
