@@ -754,6 +754,14 @@ def savefile(ftrain,csaron,cdemung,cpeking, cbonangbarung, cbonangpenerus, cslen
         h5f.create_dataset('cslenthem', data=cslenthem)
         h5f.create_dataset('cgong', data=cgong)
         h5f.create_dataset('ckendhang', data=ckendhang)
+        h5f.create_dataset('kls_saron', data=kls_saron)
+        h5f.create_dataset('kls_demung', data=kls_demung)
+        h5f.create_dataset('kls_peking', data=kls_peking)
+        h5f.create_dataset('kls_bonangbarung', data=kls_bonangbarung)
+        h5f.create_dataset('kls_bonangpenerus', data=kls_bonangpenerus)
+        h5f.create_dataset('kls_slenthem', data=kls_slenthem)
+        h5f.create_dataset('kls_gong', data=kls_gong)
+        h5f.create_dataset('kls_kendhang', data=kls_kendhang)
     
     return 0
 
@@ -777,6 +785,29 @@ def loadh5file(path):
         cgong1=np.array(cgong)
         ckendhang = h5f['ckendhang'][:]
         ckendhang1=np.array(ckendhang)
+        kls_saron= h5f['kls_saron'][:]
+        kls_saron1=np.array(kls_saron)
+        kls_demung= h5f['kls_demung'][:]
+        kls_demung1=np.array(kls_demung)
+        kls_peking= h5f['kls_peking'][:]
+        kls_peking1=np.array(kls_peking)
+        kls_bonangbarung= h5f['kls_bonangbarung'][:]
+        kls_bonangbarung1=np.array(kls_bonangbarung)
+        
+        kls_bonangpenerus= h5f['kls_bonangpenerus'][:]
+        kls_bonangpenerus1=np.array(kls_bonangpenerus)
+        
+        kls_slenthem= h5f['kls_slenthem'][:]
+        kls_slenthem1=np.array(kls_slenthem)
+        
+        kls_gong= h5f['kls_gong'][:]
+        kls_gong1=np.array(kls_gong)
+        
+        kls_kendhang= h5f['kls_kendhang'][:]
+        kls_kendhang1=np.array(kls_kendhang)
+        
+        timestamp=np.size(ckendhang1,1)
+        feature=np.size(ckendhang1,2)
     
-    return ftrain1, csaron1, cdemung1, cpeking1, cbonangbarung1, cbonangpenerus1, cslenthem1, cgong1, ckendhang1
+    return ftrain1, csaron1, cdemung1, cpeking1, cbonangbarung1, cbonangpenerus1, cslenthem1, cgong1, ckendhang1,timestamp,feature, kls_saron1, kls_demung1, kls_peking1, kls_bonangbarung1, kls_bonangpenerus1, kls_slenthem1, kls_gong1,kls_kendhang1
     

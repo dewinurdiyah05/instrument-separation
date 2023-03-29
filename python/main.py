@@ -15,7 +15,7 @@ import numpy as np
 #read h5 file
 #path file 1 ms windowing
 path='../matrix/1ms/mat1ms.h5'
-ftrain, csaron, cdemung1, cpeking, cbonangbarung, cbonangpenerus, cslenthem, cgong, ckendhang=loadh5file(path)
+ftrain, csaron, cdemung, cpeking, cbonangbarung, cbonangpenerus, cslenthem, cgong, ckendhang, timestamp,feature, kls_saron, kls_demung, kls_peking, kls_bonangbarung, kls_bonangpenerus, kls_slenthem, kls_gong, kls_kendhang=loadh5file(path)
 model_1ms,history_1ms_pred_1ms=Unet(ftrain,csaron,cdemung,cpeking, cbonangbarung, cbonangpenerus, cslenthem, cgong, ckendhang,timestamp,feature, kls_saron,kls_demung, kls_peking,kls_bonangbarung, kls_bonangpenerus, kls_slenthem, kls_gong, kls_kendhang)
 
 
