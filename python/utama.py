@@ -166,7 +166,7 @@ kls_saron,kls_demung,kls_peking,kls_bonangbarung, kls_bonangpenerus, kls_slenthe
 
 #fourier
 
-fxtrain,fysaron,fydemung,fypeking, fybonangbarung, fybonangpenerus, fyslenthem, fygong, fykendhang,i=fourier(xtrain,ysaron,ydemung,ypeking, ybonangbarung, ybonangpenerus, yslenthem, ygong, ykendhang)
+fxtrain,fysaron,fydemung,fypeking, fybonangbarung, fybonangpenerus, fyslenthem, fygong, fykendhang=fourier(xtrain,ysaron,ydemung,ypeking, ybonangbarung, ybonangpenerus, yslenthem, ygong, ykendhang)
 #softmask by saya
 ftrain,csaron,cdemung,cpeking, cbonangbarung, cbonangpenerus, cslenthem, cgong, ckendhang,timestamp,feature=binarymask(fxtrain,fysaron,fydemung,fypeking, fybonangbarung, fybonangpenerus, fyslenthem, fygong, fykendhang,numpad)
 

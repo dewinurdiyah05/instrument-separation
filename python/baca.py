@@ -16,7 +16,7 @@ import glob
 import os
 #import torch
 #from torch_audiomentations import Compose, Gain, PolarityInversion
-import soundfile as sf
+#import soundfile as sf
 import matplotlib.pyplot as plt
 import wavio
 import matplotlib.patches as mpatches
@@ -293,13 +293,13 @@ def fourier(xtrain,ysaron,ydemung,ypeking, ybonangbarung, ybonangpenerus, yslent
     fsl=np.resize(fsl,[nsample,numstep])
     fg=np.resize(fg,[nsample,numstep])
     fk=np.resize(fk,[nsample,numstep])
-    i=np.resize(imgmix,[nsample,numstep])
+    #i=np.resize(imgmix,[nsample,numstep])
     #imaginer_mix=i.astype(complex)
   
    
-    return ft,fsrn,fd,fp,fbb,fbp,fsl,fg,fk, i
+    return ft,fsrn,fd,fp,fbb,fbp,fsl,fg,fk
 
-def invers_fourier(msaron,mdemung, mpeking,mbonangbarung,win,hop,i,numpad):
+def invers_fourier(msaron,mdemung, mpeking,mbonangbarung,win,hop,numpad):
     i_saron=[]
     i_demung=[]
     i_peking=[]
@@ -330,7 +330,7 @@ def invers_fourier(msaron,mdemung, mpeking,mbonangbarung,win,hop,i,numpad):
     x_bonangbarung=pbonangbarung1.astype(complex)
     #x_peking.imag=i
     for i in range(ns):
-        
+        print("i=",i)
         invers_saron=tf.signal.irfft(x_saron[i:i+1,:]) 
         in_saron=invers_saron.numpy()
         transsaron=np.transpose(in_saron)
@@ -379,7 +379,7 @@ def invers_fourier(msaron,mdemung, mpeking,mbonangbarung,win,hop,i,numpad):
     rawdemung[:,0:hop]=hdemung[0:1,0:hop]
     rawpeking[:,0:hop]=hpeking[0:1,0:hop]
     rawbonangbarung[:,0:hop]=hbonangbarung[0:1,0:hop]
-    while(k<ns):
+    while(k<(ns-2)):
         a=k*hop
         b=((k+2)*hop)+2
         print("k=",k)
@@ -399,10 +399,10 @@ def invers_fourier(msaron,mdemung, mpeking,mbonangbarung,win,hop,i,numpad):
     rd=np.transpose(rawdemung)
     rp=np.transpose(rawpeking)
     rbb=np.transpose(rawbonangbarung)
-    wavio.write("../wav_result/saron_1ms_normal.wav", rs, 44100, sampwidth=1)
-    wavio.write("../wav_result/demung_1ms_normal.wav", rd, 44100, sampwidth=1)
-    wavio.write("../wav_result/peking_1ms_normal.wav", rp, 44100, sampwidth=1)
-    wavio.write("../wav_result/bonangbarung_1ms_normal.wav", rbb, 44100, sampwidth=1)
+    wavio.write("../wav_result/saron_1ms_normal.wav", rs, 44100, sampwidth=2)
+    wavio.write("../wav_result/demung_1ms_normal.wav", rd, 44100, sampwidth=2)
+    wavio.write("../wav_result/peking_1ms_normal.wav", rp, 44100, sampwidth=2)
+    wavio.write("../wav_result/bonangbarung_1ms_normal.wav", rbb, 44100, sampwidth=2)
     
     return i_demung,transdemung,i_demung,dm,hdemung,rawdemung,num_row,x_demung
 def invers_mask(pred_saron,pred_demung, pred_peking,pred_bonangbarung,ftrain):
