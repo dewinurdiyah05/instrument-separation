@@ -22,6 +22,7 @@ import wavio
 import matplotlib.patches as mpatches
 import matplotlib.lines as mlines
 import h5py
+from scipy.signal import wiener
 
 def bacasignal(path):
      
@@ -35,17 +36,17 @@ def bacasignal(path):
         
         print(filename)
         
-        data,sr = lb.load(filename,mono=False, sr=44100)
+        data,sr = lb.load(filename, sr=11024)
         
         
         #rescaling range 1 dan 0
-        maks=np.max(data[0][0:])
-        minim=np.min(data[0][0:])
+        maks=np.max(data)
+        minim=np.min(data)
         
-        normal=np.nan_to_num((data[0][0:0]-minim)/(maks-minim))
+        normal=np.nan_to_num((data-minim)/(maks-minim))
        
-        data1=data[0][0:]
-        panjang=len(data1)
+        
+        panjang=len(data)
         # temp=np.zeros((panjang))
         
         # for i in range(panjang-1):
@@ -55,7 +56,7 @@ def bacasignal(path):
         #         temp[i:i+1]=data1[i:i+1]
         
        
-        chanel1.append(data1)
+        chanel1.append(data)
         #chanel2.append(data2)
         length.append(panjang)
         #waktu.append(t)
@@ -93,7 +94,7 @@ def windowing(mix,saron,demung, peking, bonangbarung, bonangpenerus, slenthem, g
         s.append(total-1)
         for i in range(total):
             awal=hop*i
-            akhir=hop*(i+1)+hop
+            akhir=hop*(i+1)+(bagi-hop)
             print(awal,akhir)
             Xmix.append(mix[k][awal:akhir])
             tsaron.append(saron[k][awal:akhir])
@@ -210,6 +211,7 @@ def fourier(xtrain,ysaron,ydemung,ypeking, ybonangbarung, ybonangpenerus, yslent
     imaginer=[]
     
     for i in range(nsample):
+        tf.keras.backend.clear_session()
         mix=np.resize(xtrain[i:i+1,:],[numaudio,numtimestep])
         fmix=tf.signal.rfft(mix)
         fomix=fmix.numpy()
@@ -331,6 +333,7 @@ def invers_fourier(msaron,mdemung, mpeking,mbonangbarung,win,hop,numpad):
     #x_peking.imag=i
     for i in range(ns):
         print("i=",i)
+        tf.keras.backend.clear_session()
         invers_saron=tf.signal.irfft(x_saron[i:i+1,:]) 
         in_saron=invers_saron.numpy()
         transsaron=np.transpose(in_saron)
@@ -381,7 +384,7 @@ def invers_fourier(msaron,mdemung, mpeking,mbonangbarung,win,hop,numpad):
     rawbonangbarung[:,0:hop]=hbonangbarung[0:1,0:hop]
     while(k<(ns-2)):
         a=k*hop
-        b=((k+2)*hop)+2
+        b=((k+2)*hop)+(win-hop)
         print("k=",k)
         print("a=",a)
         print("b=",b)
@@ -399,12 +402,19 @@ def invers_fourier(msaron,mdemung, mpeking,mbonangbarung,win,hop,numpad):
     rd=np.transpose(rawdemung)
     rp=np.transpose(rawpeking)
     rbb=np.transpose(rawbonangbarung)
-    wavio.write("../wav_result/saron_1ms_normal.wav", rs, 44100, sampwidth=2)
-    wavio.write("../wav_result/demung_1ms_normal.wav", rd, 44100, sampwidth=2)
-    wavio.write("../wav_result/peking_1ms_normal.wav", rp, 44100, sampwidth=2)
-    wavio.write("../wav_result/bonangbarung_1ms_normal.wav", rbb, 44100, sampwidth=2)
     
-    return i_demung,transdemung,i_demung,dm,hdemung,rawdemung,num_row,x_demung
+    return sr,rd,rp,rbb
+
+def write_song(rs,rd,rp,rbb):
+    fil_sr=wiener(rs, (10, 1))
+    fil_dm=wiener(rd, (10, 1))
+    fil_rp=wiener(rp, (10, 1))
+    fil_rbb=wiener(rbb, (10, 1))
+    wavio.write("../wav_result/saron_1ms_normal.wav", fil_sr, 44100, sampwidth=2)
+    wavio.write("../wav_result/demung_1ms_normal.wav", fil_dm, 44100, sampwidth=2)
+    wavio.write("../wav_result/peking_1ms_normal.wav", fil_rp, 44100, sampwidth=2)
+    wavio.write("../wav_result/bonangbarung_1ms_normal.wav", fil_rbb, 44100, sampwidth=2)
+    return 0
 def invers_mask(pred_saron,pred_demung, pred_peking,pred_bonangbarung,ftrain):
     msaron=np.multiply(pred_saron,ftrain)
     mdemung=np.multiply(pred_demung,ftrain)
@@ -744,7 +754,7 @@ def Editplothasil(history_sgd,history_rmsprop,history_adam):
     
 
 def savefile(ftrain,csaron,cdemung,cpeking, cbonangbarung, cbonangpenerus, cslenthem, cgong, ckendhang,timestamp,feature, kls_saron,kls_demung, kls_peking,kls_bonangbarung, kls_bonangpenerus, kls_slenthem, kls_gong, kls_kendhang):
-    with h5py.File('../matrix/1ms/mat1ms.h5', 'w') as h5f:
+    with h5py.File('../matrix/1ms/mat93ms.h5', 'w') as h5f:
         h5f.create_dataset('ftrain', data=ftrain)
         h5f.create_dataset('csaron', data=csaron)
         h5f.create_dataset('cdemung', data=cdemung)
