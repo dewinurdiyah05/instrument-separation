@@ -153,7 +153,7 @@ p_gong=[kelas_slenthem[1]]
 p_kendhang=[kelas_kendhang[1]]
 #windowing
 
-win=1025
+win=1026 #93ms
 hop=512
 numpad=5 #number of padding
 # win=44 #1ms
